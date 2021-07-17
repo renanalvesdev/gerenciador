@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import br.com.alura.gerenciador.acao.Acao;
 import br.com.alura.gerenciador.acao.AlteraEmpresa;
 import br.com.alura.gerenciador.acao.FormNovaEmpresa;
 import br.com.alura.gerenciador.acao.ListaEmpresas;
@@ -24,55 +25,27 @@ public class UnicaEntradaServlet extends HttpServlet {
 	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		String paramAcao = request.getParameter("acao");
-		String nome = null;
+	protected void service(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
-		switch (paramAcao) {
-			case "ListaEmpresa": {
-				
-				ListaEmpresas acao = new ListaEmpresas();
-				nome = acao.executa(request, response);								
-				System.out.println("Listando empresa");
-				break;
-			}
-			case "RemoveEmpresa": {
-				RemoveEmpresa acao = new RemoveEmpresa();
-				nome = acao.executa(request, response);
-				break;
-			}
-			case "NovaEmpresa": {
-				NovaEmpresa acao = new NovaEmpresa();
-				nome = acao.executa(request, response);
-				System.out.println("Mostrando empresa");
-				break;
-			}
-			case "MostraEmpresa": {
-				MostraEmpresa acao = new MostraEmpresa();
-				nome = acao.executa(request, response);
-				System.out.println("Mostrando empresa");
-				break;
-			}
-			case "AlteraEmpresa": {
-				AlteraEmpresa acao = new AlteraEmpresa();
-				nome = acao.executa(request, response);
-				System.out.println("Alterando empresa");
-				break;
-			}
-			case "FormNovaEmpresa": {
-				FormNovaEmpresa acao = new FormNovaEmpresa();
-				nome = acao.executa(request, response);
-				System.out.println("Abrindo formulario nova empresa");
-				break;
-			}
-			
+		String paramAcao = request.getParameter("acao");
+		String nome;
+		String nomeDaClasse = "br.com.alura.gerenciador.acao." + paramAcao;
+
+		try {
+			Class classe = Class.forName(nomeDaClasse);
+			Acao acao;
+			acao = (Acao) classe.newInstance();
+
+			nome = acao.executa(request, response);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			throw new ServletException(e);
 		}
-		
+
 		String[] tipoEEndereco = nome.split(":");
-		
-		if(tipoEEndereco[0].equals("forward")) {
-			RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/view/" +tipoEEndereco[1]);
+
+		if (tipoEEndereco[0].equals("forward")) {
+			RequestDispatcher rd = request.getRequestDispatcher("WEB-INF/view/" + tipoEEndereco[1]);
 			rd.forward(request, response);
 		} else {
 			response.sendRedirect(tipoEEndereco[1]);

@@ -50,7 +50,7 @@ public class NovaEmpresaServlet extends HttpServlet {
 		//primeiro cria o motoboy e depois manda pra frente
 		//RequestDispatcher rd = request.getRequestDispatcher("/listaEmpresas");
 		request.setAttribute("empresa", empresa.getNome());
-		response.sendRedirect("entrada?acao=ListaEmpresa");
+		response.sendRedirect("entrada?acao=ListaEmpresas");
 		//rd.forward(request, response);
 			
 	}

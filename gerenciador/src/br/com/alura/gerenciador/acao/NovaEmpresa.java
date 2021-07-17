@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import br.com.alura.gerenciador.model.Banco;
 import br.com.alura.gerenciador.model.Empresa;
 
-public class NovaEmpresa {
+public class NovaEmpresa implements Acao{
 
 	public String executa(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
 		
@@ -39,7 +39,7 @@ public class NovaEmpresa {
 		//primeiro cria o motoboy e depois manda pra frente
 		//RequestDispatcher rd = request.getRequestDispatcher("/listaEmpresas");
 		request.setAttribute("empresa", empresa.getNome());
-		return "redirect:entrada?acao=ListaEmpresa";
+		return "redirect:entrada?acao=ListaEmpresas";
 		//rd.forward(request, response);
 	}
 

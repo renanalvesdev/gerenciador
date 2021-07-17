@@ -15,7 +15,7 @@
 		Empresa ${empresa} cadastrada com sucesso !
 	</c:if>
 	
-	<a href="/gerenciador/formNovaEmpresa.jsp">+ Nova Empresa</a><br/><br/>
+	<a href="/gerenciador/entrada?acao=FormNovaEmpresa">+ Nova Empresa</a><br/><br/>
 	
 	Lista de empresas: <br/>
 	<ul>
