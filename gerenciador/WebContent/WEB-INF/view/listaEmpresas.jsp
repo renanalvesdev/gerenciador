@@ -11,6 +11,16 @@
 </head>
 <body>
 
+	<a href="entrada?acao=Logout">Sair</a>
+
+
+	Usuario Logado: ${usuarioLogado.login}
+	
+	<br/>
+	<br/>
+	<br/>
+	<br/>
+
 	<c:if test="${not empty empresa}">
 		Empresa ${empresa} cadastrada com sucesso !
 	</c:if>

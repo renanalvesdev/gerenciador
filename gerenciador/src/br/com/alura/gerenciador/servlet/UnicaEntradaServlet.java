@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import br.com.alura.gerenciador.acao.Acao;
 import br.com.alura.gerenciador.acao.AlteraEmpresa;
@@ -27,8 +28,20 @@ public class UnicaEntradaServlet extends HttpServlet {
 	 */
 	protected void service(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
-		String paramAcao = request.getParameter("acao");
+		
+		
+		String paramAcao = request.getParameter("acao"); 
+		
+		HttpSession sessao = request.getSession();		
+		boolean usuarioNaoEstaLogado = (sessao.getAttribute("usuarioLogado") == null);
+		boolean ehUmaAcaoProtegida = !(paramAcao.equals("Login") || paramAcao.equals("LoginForm"));
+		
+		
+		if(ehUmaAcaoProtegida && usuarioNaoEstaLogado) {
+			response.sendRedirect("entrada?acao=LoginForm");
+			return;
+		}
+		
 		String nome;
 		String nomeDaClasse = "br.com.alura.gerenciador.acao." + paramAcao;
 
@@ -36,7 +49,6 @@ public class UnicaEntradaServlet extends HttpServlet {
 			Class classe = Class.forName(nomeDaClasse);
 			Acao acao;
 			acao = (Acao) classe.newInstance();
-
 			nome = acao.executa(request, response);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
 			throw new ServletException(e);
